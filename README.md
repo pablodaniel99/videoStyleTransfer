@@ -1,1 +1,1 @@
-# easyStyleTransfer
+# Video Style Transfer
