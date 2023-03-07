@@ -1,49 +1,49 @@
-# Importamos las bibliotecas necesarias para el transfer de estilo, la captura de video y el manejo del tiempo
+# We import needed libraries for style transfer, video deploying on screen and time management 
 import tensorflow as tf
 import cv2
 import time
 
-# Creamos una instancia de la cámara
+# Create a new camera instance
 captura = cv2.VideoCapture(0)
 
-# Creamos una lista con los diferentes estilos que queremos aplicar
+# Here we insert the file rute to the style images we are about to use
 estilos = ["ruta/del/estilo1.jpg", "ruta/del/estilo2.jpg", "ruta/del/estilo3.jpg"]
 
-# Creamos una variable para almacenar el tiempo de inicio del bucle
+# We create a new instance  Creamos una variable para almacenar el tiempo de inicio del bucle
 inicio = time.time()
 
-# Creamos un bucle para capturar y procesar cada fotograma del video
+# Loop for capturing and process each photogram
 while(True):
-    # Leemos un fotograma del video
+    # We 'read' each photogram
     ret, frame = captura.read()
 
-    # Si no hay más fotogramas, terminamos el bucle
+    # If there is no photograms reamaining, the loop if finished
     if not ret:
         break
 
-    # Si han pasado más de 30 segundos desde el inicio del bucle, cambiamos de estilo
+    # After 30 seconds, the style is change
     if time.time() - inicio > 30:
-        # Reiniciamos el contador de tiempo
+        # Restart the time count
         inicio = time.time()
 
-        # Cargamos el siguiente estilo de la lista
+        # We get the next style from the list above
         estilo = tf.keras.preprocessing.image.load_img(estilos[i % len(estilos)])
         i += 1
 
-    # Generamos una representación en tensor del fotograma
+    # Generating a representation on the tensor of the photogram
     frame_tensor = tf.keras.applications.vgg19.preprocess_input(tf.keras.preprocessing.image.img_to_array(frame))
 
-    # Aplicamos el transfer de estilo al fotograma
+    # The style is applied to the photogram
     frame_procesado = modelo.predict(frame_tensor)
 
-    # Mostramos el fotograma original y el fotograma con el transfer de estilo aplicado
+    # The original photogram and the one with the style applied is showed
     cv2.imshow("Original", frame)
     cv2.imshow("Transfer de estilo", frame_procesado)
 
-    # Si se pulsa la tecla 'q', terminamos el bucle
+    # If the key 'q' is pressed, the script is finished 
     if cv2.waitKey(1) & 0xFF == ord("q"):
         break
 
-# Liberamos la cámara y cerramos las ventanas de video
+# The camera instance is deleted and then the window is closed
 captura.release()
 cv2.destroyAllWindows()
